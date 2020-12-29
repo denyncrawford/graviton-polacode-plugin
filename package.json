@@ -1,6 +1,6 @@
 {
   "name": "polacode",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Polacode made for graviton",
   "main": "dist/index.js",
   "id": "polacode",
