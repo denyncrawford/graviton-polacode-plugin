@@ -1,0 +1,21 @@
+{
+  "name": "polacode",
+  "version": "1.0.0",
+  "description": "Polacode made for graviton",
+  "main": "dist/index.js",
+  "id": "polacode",
+  "mainSrc": "src/index.js",
+  "mainDev": "dist/index.js",
+  "scripts": {
+    "watch": "gvsdk --project . --target plugin --mode dev",
+    "build": "gvsdk --project . --target plugin --mode release"
+  },
+  "author": "denyncrawford",
+  "license": "MIT",
+  "devDependencies": {
+    "@gveditor/sdk": "^0.4.6"
+  },
+  "dependencies": {
+    "@denyncrawford/html-to-image": "github:denyncrawford/html-to-image"
+  }
+}
