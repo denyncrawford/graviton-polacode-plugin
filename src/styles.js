@@ -10,14 +10,17 @@ export default function getStyles(style){
     & > * {
       color: var(--textColor);
     }
-    & h1 {
-      margin-top: 100px;
+    & p {
+      margin: 0 auto;
+      max-width: 400px;
+      text-align: center;
     }
     & #polacode {
       width: auto;
       border-radius: 5px;
       user-select: none;
       background: white;
+      margin-y: 25px;
       padding: 25px;
       display: flex;
       justify-content: center;
@@ -41,7 +44,7 @@ export default function getStyles(style){
     & .demo {
       overflow: auto;
       max-height: 500px;
-      flex: 1;
+      flex-grow: row;
     }
     & .CodeMirror {
       font-size: 12px;
@@ -51,6 +54,9 @@ export default function getStyles(style){
     }
     & .CodeMirror .cm-tab{
       border-left: 0px;
+    }
+    & #savePolacode {
+      margin-top: 0;
     }
  `;
 }

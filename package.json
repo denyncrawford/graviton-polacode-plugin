@@ -16,6 +16,7 @@
     "@gveditor/sdk": "^0.4.6"
   },
   "dependencies": {
-    "@denyncrawford/html-to-image": "github:denyncrawford/html-to-image"
+    "@denyncrawford/html-to-image": "github:denyncrawford/html-to-image",
+    "file-saver": "^2.0.5"
   }
 }

@@ -1,9 +1,14 @@
 import { toBlob } from '@denyncrawford/html-to-image';
 import getStyles from './styles'
+import { saveAs } from 'file-saver';
+import { writeFile as syncWriteFIle } from 'fs';
+import { promisify } from 'util'
+
+const writeFile = promisify(syncWriteFIle)
 
 export const entry = ({
   Tab,
-  ContexMenu,
+  ContextMenu,
   RunningConfig,
   StaticConfig,
   CodeMirror,
@@ -11,6 +16,9 @@ export const entry = ({
   puffin: {
     element,
     style,
+  },
+  drac: { 
+    Button 
   },
 }) => {
   
@@ -26,18 +34,45 @@ export const entry = ({
       const mode = editor.getOption('mode');
       
       RunningConfig.emit('command.newPanel')
+
       new Tab({
         title: '🤠 PolaCode',
         component() {
+          
+          let blob;
+
+          // Context menu
+
+          const onContextMenu = event =>  {
+            new ContextMenu({
+              list: [
+                {
+                  label: 'Copy Polacode',
+                  action() {
+                    copy(blob)
+                  }
+                }
+              ],
+              event,
+              parent: document.body
+            })
+          }
+
+          // Save File
+
+          const save = () => {
+            // File saver not great, enable electron dialog ASAP.
+            console.log(blob)
+            saveAs(blob, 'polacode.png');
+          }
+
+          // Mounted
 
           async function mounted(){
             const { textTheme: theme } = PluginsRegistry.registry.data.list[StaticConfig.data.appTheme]
-            // StaticConfig.keyChanged(
-            //   "appTheme",
-            //   (nuevoTema) => console.log(nuevoTema),
-            // );
             
             const CodeMirrorWrapper = document.getElementById('polacodeCodemirror')
+
             const CodeMirrorInstance = CodeMirror.fromTextArea(CodeMirrorWrapper, {
               theme,
               mode,
@@ -49,28 +84,29 @@ export const entry = ({
             CodeMirrorInstance.setValue(selection)
             
             const node = this.children[2].children[0]
-            const blob = await toBlob(node, {
+            blob = await toBlob(node, {
               pixelRatio: 5,
-              backgroundColor: 'rgb(255,255,255)'
-            })
-            
-            navigator.clipboard.write([
-              new ClipboardItem({
-                'image/png': blob
-              })
-            ])
+              backgroundColor: 'transparent'
+            })     
+
+            copy(blob)
+
           };
           
-          return element`
+          return element({ components: { Button }})`
            <div class="${myStyles}" mounted="${mounted}">
              <h1>Polacode: Code Snapshots</h1>
-             <p>This is a snapshot of your code!</p>
+             <p>This is a snapshot of your code! It is now on the clipboard, 
+             if you want to copy again, do right click over the sanpshot.</p>
              <div class="demo">
-               <div id="polacode">
+               <div :contextmenu="${onContextMenu}" id="polacode">
                  <div class="container">
                    <textarea id="polacodeCodemirror"></textarea>
                  </div>
                </div>
+             </div>
+             <div id="savePolacode">
+               <Button :click="${save}">Save</Button>            
              </div>
            </div>`;
         },
@@ -78,3 +114,11 @@ export const entry = ({
     },
   });
 };
+
+const copy = blob => {
+  navigator.clipboard.write([
+    new ClipboardItem({
+      'image/png': blob
+    })
+  ])
+}
