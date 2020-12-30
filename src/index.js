@@ -12,6 +12,7 @@ export const entry = ({
   StaticConfig,
   CodeMirror,
   PluginsRegistry,
+  Notification,
   Dialogs: { 
     saveFileAs
   },
@@ -77,6 +78,10 @@ export const entry = ({
               ]
             });
             await writeFile(filename, base64Data, 'base64')
+            new Notification({
+              title: 'Saved Polacode',
+	            content: `The file was saved to ${filename}`,
+            })
           }
 
           // Mounted
