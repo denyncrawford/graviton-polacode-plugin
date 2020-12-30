@@ -61,8 +61,7 @@ export const entry = ({
           // Save File
 
           const save = () => {
-            // File saver not great, enable electron dialog ASAP.
-            console.log(blob)
+            // Using this module is not nice
             saveAs(blob, 'polacode.png');
           }
 
@@ -86,7 +85,7 @@ export const entry = ({
             const node = this.children[2].children[0]
             blob = await toBlob(node, {
               pixelRatio: 5,
-              backgroundColor: 'transparent'
+              backgroundColor: 'rgb(255,255,255)'
             })     
 
             copy(blob)
