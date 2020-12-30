@@ -20,7 +20,6 @@ export default function getStyles(style){
       border-radius: 5px;
       user-select: none;
       background: white;
-      margin-y: 25px;
       padding: 25px;
       display: flex;
       justify-content: center;
@@ -45,6 +44,7 @@ export default function getStyles(style){
       overflow: auto;
       max-height: 500px;
       flex-grow: row;
+      margin: 25px 0;
     }
     & .CodeMirror {
       font-size: 12px;
