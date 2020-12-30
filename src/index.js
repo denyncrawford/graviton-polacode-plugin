@@ -1,6 +1,5 @@
-import { toBlob } from '@denyncrawford/html-to-image';
+import { toBlob, toPng } from '@denyncrawford/html-to-image';
 import getStyles from './styles'
-import { saveAs } from 'file-saver';
 import { writeFile as syncWriteFIle } from 'fs';
 import { promisify } from 'util'
 
@@ -13,6 +12,9 @@ export const entry = ({
   StaticConfig,
   CodeMirror,
   PluginsRegistry,
+  Dialogs: { 
+    saveFileAs
+  },
   puffin: {
     element,
     style,
@@ -40,6 +42,7 @@ export const entry = ({
         component() {
           
           let blob;
+          let node;
 
           // Context menu
 
@@ -60,9 +63,20 @@ export const entry = ({
 
           // Save File
 
-          const save = () => {
+          const save = async () => {
             // Using this module is not nice
-            saveAs(blob, 'polacode.png');
+            let image = await toPng(node, {
+              pixelRatio: 5,
+              backgroundColor: 'rgb(255,255,255)'
+            })
+            const base64Data = image.replace(/^data:([A-Za-z-+/]+);base64,/, '');
+            const filename = await saveFileAs({
+              title: "polacode",
+              filters: [
+                { name: 'PNG Files', extensions: ['png'] },
+              ]
+            });
+            await writeFile(filename, base64Data, 'base64')
           }
 
           // Mounted
@@ -82,7 +96,7 @@ export const entry = ({
             });
             CodeMirrorInstance.setValue(selection)
             
-            const node = this.children[2].children[0]
+            node = this.children[2].children[0]
             blob = await toBlob(node, {
               pixelRatio: 5,
               backgroundColor: 'rgb(255,255,255)'
