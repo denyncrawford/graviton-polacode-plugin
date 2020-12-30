@@ -55,7 +55,7 @@ export default function getStyles(style){
     & .CodeMirror .cm-tab{
       border-left: 0px;
     }
-    & #savePolacode {
+    & .savePolacode {
       margin-top: 0;
     }
  `;

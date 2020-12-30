@@ -30,7 +30,6 @@ export const entry = ({
   
   RunningConfig.data.editorContextMenuButtons.push({
     label: 'New polacode',
-    id: Math.random(),
     action() {
       const editor = RunningConfig.data.focusedEditor.instance;
       const selection = editor.getSelection();
@@ -40,6 +39,7 @@ export const entry = ({
 
       new Tab({
         title: '🤠 PolaCode',
+        id: Math.random(),
         component() {
           
           let blob;
@@ -53,7 +53,7 @@ export const entry = ({
                 {
                   label: 'Copy Polacode',
                   action() {
-                    copy(blob)
+                    copyToCripboard(blob)
                   }
                 }
               ],
@@ -62,6 +62,12 @@ export const entry = ({
             })
           }
 
+          // Copy File
+
+          const copy = () => {
+            copyToCripboard(blob)
+          }
+          
           // Save File
 
           const save = async () => {
@@ -80,7 +86,7 @@ export const entry = ({
             await writeFile(filename, base64Data, 'base64')
             new Notification({
               title: 'Saved Polacode',
-	            content: `The file was saved to ${filename}`,
+              content: `The file was saved to ${filename}`,
             })
           }
 
@@ -89,7 +95,7 @@ export const entry = ({
           async function mounted(){
             const { textTheme: theme } = PluginsRegistry.registry.data.list[StaticConfig.data.appTheme]
             
-            const CodeMirrorWrapper = document.getElementById('polacodeCodemirror')
+            const CodeMirrorWrapper = this.getElementsByClassName('polacodeCodemirror')[0]
 
             const CodeMirrorInstance = CodeMirror.fromTextArea(CodeMirrorWrapper, {
               theme,
@@ -107,7 +113,7 @@ export const entry = ({
               backgroundColor: 'rgb(255,255,255)'
             })     
 
-            copy(blob)
+            copyToCripboard(blob)
 
           };
           
@@ -119,11 +125,12 @@ export const entry = ({
              <div class="demo">
                <div :contextmenu="${onContextMenu}" id="polacode">
                  <div class="container">
-                   <textarea id="polacodeCodemirror"></textarea>
+                   <textarea class="polacodeCodemirror"></textarea>
                  </div>
                </div>
              </div>
-             <div id="savePolacode">
+             <div class="savePolacode">
+               <Button :click="${copy}">Copy</Button>         
                <Button :click="${save}">Save</Button>            
              </div>
            </div>`;
@@ -133,7 +140,7 @@ export const entry = ({
   });
 };
 
-const copy = blob => {
+const copyToCripboard = blob => {
   navigator.clipboard.write([
     new ClipboardItem({
       'image/png': blob
