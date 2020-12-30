@@ -24,7 +24,7 @@ Contributions are welcomed!
 ## 🕹 Developing
 Clone the repo to your .graviton2/plugins:
 ```shell
-git clone https://github.com/denyncrawford/https://github.com/denyncrawford/graviton-polacode-plugin.git 
+git clone https://github.com/denyncrawford/graviton-polacode-plugin.git 
 ```
 
 Install dependencies:
